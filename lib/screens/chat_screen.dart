@@ -1,40 +1,58 @@
+import 'package:chat/widgets/messages.dart';
+import 'package:chat/widgets/new_message.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 
 class ChatScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    const String LOGOUT_VALUE = 'logout';
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Chat Screen'),
-      ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('chat').snapshots(),
-        builder: (context, snapshot) {
-          if(snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          final List<QueryDocumentSnapshot<Object?>>? documents = snapshot.data?.docs;
-          return ListView.builder(
-            itemCount: documents?.length,
-            itemBuilder: (context, index) => Container(
-              padding: EdgeInsets.all(10),
-              child: Text(documents?[index].get('text')),
+        title: Text('Flutter Chat'),
+        actions: [
+          DropdownButtonHideUnderline(
+            child: DropdownButton(
+              icon: Icon(
+                Icons.more_vert,
+                color: Theme.of(context).primaryIconTheme.color,
+              ),
+              items: [
+                DropdownMenuItem(
+                  value: LOGOUT_VALUE,
+                  child: Container(
+                      child: Row(
+                    children: [
+                      Icon(
+                        Icons.exit_to_app,
+                        color: Theme.of(context).iconTheme.color,
+                      ),
+                      SizedBox(width: 2.w),
+                      Text('Sair'),
+                    ],
+                  )),
+                ),
+              ],
+              onChanged: (String? item) async {
+                if (item == LOGOUT_VALUE) {
+                  await FirebaseAuth.instance.signOut();
+                }
+              },
             ),
-          );
-        },
+          ),
+        ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          await FirebaseFirestore.instance.collection('chat').add({
-            'text': 'Adicionado manualmente'
-          });
-        },
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      body: Column(
+        children: [
+          Expanded(
+            child: Messages(),
+          ),
+          NewMessage(),
+        ],
+      ),
     );
   }
 }

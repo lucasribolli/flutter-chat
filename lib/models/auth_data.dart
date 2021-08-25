@@ -1,19 +1,13 @@
 enum AuthMode {
-  LOGIN, 
+  LOGIN,
   SIGNUP,
 }
 
 class AuthData {
   String? name;
-  String? email;
-  String? password;
-  AuthMode? _mode = AuthMode.LOGIN;
-
-  AuthData({
-    this.name,
-    this.email,
-    this.password,
-  });
+  late String email;
+  late String password;
+  AuthMode _mode = AuthMode.LOGIN;
 
   bool get isSignup {
     return _mode == AuthMode.SIGNUP;
