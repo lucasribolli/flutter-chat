@@ -1,4 +1,5 @@
 import 'package:chat/models/auth_data.dart';
+import 'package:chat/widgets/user_image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sizer/sizer.dart';
@@ -36,7 +37,7 @@ class _AuthFormState extends State<AuthForm> with SingleTickerProviderStateMixin
   }
 
   double _cardHeightFromMode() {
-    return _authData.isLogin ? 45.h : 52.h;
+    return _authData.isLogin ? 45.h : 70.h;
   }
 
   @override
@@ -66,6 +67,7 @@ class _AuthFormState extends State<AuthForm> with SingleTickerProviderStateMixin
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  if (_authData.isSignup) UserImagePicker(),
                   if (_authData.isSignup)
                     TextFormField(
                       key: ValueKey('name'),

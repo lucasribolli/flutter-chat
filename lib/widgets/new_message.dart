@@ -1,5 +1,6 @@
 import 'package:chat/models/message_data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
@@ -9,30 +10,37 @@ class NewMessage extends StatefulWidget {
 }
 
 class _NewMessageState extends State<NewMessage> {
-  late TextEditingController _textFieldController;
+  late TextEditingController _textEditingController;
   late String _enterededMessage;
   late bool _sendEnabled;
 
   Future<void> _sendMessage() async {
-    MessageData messageData = MessageData(
-      text: _enterededMessage,
-      createdAt: Timestamp.now(),
-    );
+    User? user = FirebaseAuth.instance.currentUser;
 
-    await FirebaseFirestore.instance.collection('chat').add(messageData.toMap());
+    if (user != null) {
+      final userData = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+      MessageData messageData = MessageData(
+        text: _enterededMessage,
+        createdAt: Timestamp.now(),
+        userId: user.uid,
+        userName: userData.get('name'),
+      );
+
+      await FirebaseFirestore.instance.collection('chat').add(messageData.toMap());
+    }
   }
 
   @override
   void initState() {
     _enterededMessage = '';
     _sendEnabled = false;
-    _textFieldController = TextEditingController();
+    _textEditingController = TextEditingController();
     super.initState();
   }
 
   @override
   void dispose() {
-    _textFieldController.dispose();
+    _textEditingController.dispose();
     super.dispose();
   }
 
@@ -50,7 +58,7 @@ class _NewMessageState extends State<NewMessage> {
                 left: 2.w,
               ),
               child: TextField(
-                controller: _textFieldController,
+                controller: _textEditingController,
                 decoration: InputDecoration(
                   hintText: 'Enviar mensagem',
                 ),
@@ -73,7 +81,7 @@ class _NewMessageState extends State<NewMessage> {
               setState(() {
                 _sendEnabled = false;
               });
-              _textFieldController.clear();
+              _textEditingController.clear();
             },
             icon: Icon(
               Icons.send,
