@@ -1,13 +1,12 @@
 import 'package:chat/screens/auth_screen.dart';
 import 'package:chat/screens/chat_screen.dart';
+import 'package:chat/screens/splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
   runApp(
     MyApp(),
   );
@@ -17,6 +16,9 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+
+  final Future<FirebaseApp> _initFirebase = Firebase.initializeApp();
+
     return Sizer(builder: (context, orientation, deviceType) {
       return MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -32,17 +34,28 @@ class MyApp extends StatelessWidget {
             textTheme: ButtonTextTheme.primary,
           ),
         ),
-        home: StreamBuilder(
-          stream: FirebaseAuth.instance.authStateChanges(),
-          builder: (context, userSnapshot) {
-            if (userSnapshot.hasData) {
-              return ChatScreen();
-            } else {
-              return AuthScreen();
+        home: FutureBuilder(
+          future: _initFirebase,
+          builder: (context, snapshot) {
+            if(snapshot.connectionState == ConnectionState.waiting) {
+              return SplashScreen();
+            }
+            else {
+              return StreamBuilder(
+                stream: FirebaseAuth.instance.authStateChanges(),
+                builder: (context, userSnapshot) {
+                  if (userSnapshot.hasData) {
+                    return ChatScreen();
+                  } else {
+                    return AuthScreen();
+                  }
+                },
+              );
             }
           },
         ),
       );
-    });
+    }
+    );
   }
 }

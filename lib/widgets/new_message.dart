@@ -1,6 +1,7 @@
 import 'package:chat/models/message_data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
@@ -24,6 +25,7 @@ class _NewMessageState extends State<NewMessage> {
         createdAt: Timestamp.now(),
         userId: user.uid,
         userName: userData.get('name'),
+        userImage: userData.get('imageUrl'),
       );
 
       await FirebaseFirestore.instance.collection('chat').add(messageData.toMap());

@@ -5,12 +5,14 @@ class MessageData {
   Timestamp createdAt;
   String userId;
   String userName;
+  String userImage;
 
   MessageData({
     required this.text,
     required this.createdAt,
     required this.userId,
     required this.userName,
+    required this.userImage,
   });
 
   Map<String, dynamic> toMap() {
@@ -19,6 +21,7 @@ class MessageData {
       'createdAt': createdAt,
       'userId': userId,
       'userName': userName,
+      'userImage': userImage,
     };
   }
 
@@ -28,6 +31,7 @@ class MessageData {
       createdAt: map['createdAt'],
       userId: map['userId'],
       userName: map['userName'],
+      userImage: map['userImage'],
     );
   }
 }

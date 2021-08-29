@@ -34,6 +34,7 @@ class Messages extends StatelessWidget {
               message: chatDocs?[index].get('text'),
               belongsToMe: _doesMessageBelongsToMe(chatDocs?[index].get('userId')),
               userName: chatDocs?[index].get('userName'),
+              userImage: chatDocs?[index].get('userImage'),
               key: ValueKey(chatDocs?[index].id),
             );
           },

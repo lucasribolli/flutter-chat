@@ -1,15 +1,18 @@
 class UserData {
-  final String? name;
-  late final String email;
+  String? name;
+  late String email;
+  String? imageUrl;
 
   UserData({
     required this.name,
     required this.email,
+    this.imageUrl,
   });
 
   Map<String, String> toMap() {
     return {
       'name': name ?? '',
+      'imageUrl': imageUrl ?? '',
       'email': email,
     };
   }
@@ -18,6 +21,7 @@ class UserData {
     return UserData(
       name: map['name'],
       email: map['email'],
+      imageUrl: map['imageUrl'],
     );
   }
 }

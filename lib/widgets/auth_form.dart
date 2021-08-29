@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:chat/models/auth_data.dart';
 import 'package:chat/widgets/user_image_picker.dart';
+import 'package:chat/widgets/utils/snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sizer/sizer.dart';
@@ -20,24 +23,32 @@ class AuthForm extends StatefulWidget {
 class _AuthFormState extends State<AuthForm> with SingleTickerProviderStateMixin {
   final GlobalKey<FormState> _formKey = GlobalKey();
   AuthData _authData = AuthData();
-
   late double _cardHeight;
 
-  void _hideKeyboard() {
-    FocusScope.of(context).unfocus();
+  double _cardHeightFromMode() {
+    return _authData.isLogin ? 45.h : 70.h;
+  }
+
+  void _handlePickedImage(File image) {
+    _authData.image = image;
   }
 
   _submitForm() {
     bool isValid = _formKey.currentState!.validate();
     _hideKeyboard();
 
+    if(_authData.isSignup && _authData.image == null) {
+      SnackBarUtils.showSnackBarError(context, 'Precisamos da sua foto para cadastro!');
+      return;
+    }
+
     if (isValid) {
       widget.onSubmit(_authData);
     }
   }
 
-  double _cardHeightFromMode() {
-    return _authData.isLogin ? 45.h : 70.h;
+  void _hideKeyboard() {
+    FocusScope.of(context).unfocus();
   }
 
   @override
@@ -67,7 +78,7 @@ class _AuthFormState extends State<AuthForm> with SingleTickerProviderStateMixin
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  if (_authData.isSignup) UserImagePicker(),
+                  if (_authData.isSignup) UserImagePicker(_handlePickedImage),
                   if (_authData.isSignup)
                     TextFormField(
                       key: ValueKey('name'),
