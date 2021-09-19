@@ -23,6 +23,10 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We need access to let you pick an image</string>
+	<key>NSCameraUsageDescription</key>
+	<string>We need access to let you pick an image</string>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
