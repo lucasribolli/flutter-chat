@@ -1,61 +1,26 @@
-import 'package:chat/screens/auth_screen.dart';
-import 'package:chat/screens/chat_screen.dart';
-import 'package:chat/screens/splash_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:chat/screens/pages/auth_page.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-void main() async {
-  runApp(
-    MyApp(),
-  );
+void main() {
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-
-  final Future<FirebaseApp> _initFirebase = Firebase.initializeApp();
-
-    return Sizer(builder: (context, orientation, deviceType) {
-      return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Flutter Chat',
-        theme: ThemeData(
-          primarySwatch: Colors.pink,
-          backgroundColor: Colors.pink,
-          accentColor: Colors.deepPurple,
-          accentColorBrightness: Brightness.dark,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-          buttonTheme: ButtonTheme.of(context).copyWith(
-            buttonColor: Colors.pink,
-            textTheme: ButtonTextTheme.primary,
+    return Sizer(
+      builder: (context, orientation, deviceType) {
+        return MaterialApp(
+          title: 'Flutter Demo',
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
           ),
-        ),
-        home: FutureBuilder(
-          future: _initFirebase,
-          builder: (context, snapshot) {
-            if(snapshot.connectionState == ConnectionState.waiting) {
-              return SplashScreen();
-            }
-            else {
-              return StreamBuilder(
-                stream: FirebaseAuth.instance.authStateChanges(),
-                builder: (context, userSnapshot) {
-                  if (userSnapshot.hasData) {
-                    return ChatScreen();
-                  } else {
-                    return AuthScreen();
-                  }
-                },
-              );
-            }
-          },
-        ),
-      );
-    }
+          home: const AuthPage(),
+        );
+      },
     );
   }
 }
