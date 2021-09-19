@@ -1,5 +1,7 @@
+import 'package:chat/core/services/auth/auth_mock_service.dart';
+import 'package:chat/core/services/auth/auth_service.dart';
 import 'package:chat/screens/components/auth_form.dart';
-import 'package:chat/screens/models/auth_form_data.dart';
+import 'package:chat/core/models/auth_form_data.dart';
 import 'package:flutter/material.dart';
 
 class AuthPage extends StatefulWidget {
@@ -17,9 +19,17 @@ class _AuthPageState extends State<AuthPage> {
       setState(() => _isLoading = true); 
 
       if(formData.isLogin) {
-        
+        await AuthService().login(
+          formData.email, 
+          formData.password
+        );
       } else {
-
+        await AuthService().signup(
+          formData.name,
+          formData.email, 
+          formData.password,
+          formData.image,
+        );
       }
 
     } catch(error) {

@@ -1,4 +1,4 @@
-mixin ValidatorImp {
+mixin ValidatorMixin {
   String? _warningMessage;
 
   String? get warningMessage {
@@ -6,7 +6,7 @@ mixin ValidatorImp {
   }
 }
 
-abstract class FieldValidator with ValidatorImp {
+abstract class FieldValidator with ValidatorMixin {
   bool isValid();
 }
 

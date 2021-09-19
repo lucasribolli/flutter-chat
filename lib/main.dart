@@ -1,3 +1,4 @@
+import 'package:chat/screens/pages/auth_or_app_page.dart';
 import 'package:chat/screens/pages/auth_page.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
@@ -18,7 +19,8 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: Colors.blue,
           ),
-          home: const AuthPage(),
+          home: const AuthOrAppPage(),
+          debugShowCheckedModeBanner: false,
         );
       },
     );

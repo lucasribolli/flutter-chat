@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:chat/screens/components/user_image_picker.dart';
-import 'package:chat/screens/models/auth_form_data.dart';
+import 'package:chat/core/models/auth_form_data.dart';
 import 'package:chat/screens/utils/validator.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
@@ -57,24 +57,28 @@ class _AuthFormState extends State<AuthForm> {
             child: Column(
               children: [
                 if(_formData.isSignup)
-                  UserImagePicker(
-                    onImagePick: _handleImagePick,
-                  ),
-                  SizedBox(height: 2.w),
-                  TextFormField(
-                    initialValue: _formData.name,
-                    onChanged: (name) => _formData.name = name,
-                    key: const ValueKey('name_key'),
-                    decoration: const InputDecoration(
-                      labelText: 'Name'
-                    ),
-                    validator: (String? name) {
-                      final validator = NameValidator(name);
-                      if(validator.isValid()) {
-                        return null;
-                      }
-                      return validator.warningMessage;
-                    },
+                  Column(
+                    children: [
+                      UserImagePicker(
+                        onImagePick: _handleImagePick,
+                      ),
+                      SizedBox(height: 2.w),
+                      TextFormField(
+                        initialValue: _formData.name,
+                        onChanged: (name) => _formData.name = name,
+                        key: const ValueKey('name_key'),
+                        decoration: const InputDecoration(
+                          labelText: 'Name'
+                        ),
+                        validator: (String? name) {
+                          final validator = NameValidator(name);
+                          if(validator.isValid()) {
+                            return null;
+                          }
+                          return validator.warningMessage;
+                        },
+                      ),
+                    ],
                   ),
                 TextFormField(
                   initialValue: _formData.email,
