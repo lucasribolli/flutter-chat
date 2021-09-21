@@ -1,5 +1,4 @@
 import 'package:chat/screens/pages/auth_or_app_page.dart';
-import 'package:chat/screens/pages/auth_page.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 

@@ -5,9 +5,9 @@ import 'package:chat/core/services/auth/auth_service.dart';
 
 class AuthMockService implements AuthService {
   static const _defaultUser = ChatUser(
-    id: '1', 
-    name: 'mockuser', 
-    email: 'mockemail@email.com',
+    id: '2',
+    name: 'Tech Lead',
+    email: 'techlead@email.com',
     imageUrl: 'assets/images/avatar.png',
   );
   static Map<String, ChatUser> _users = {
@@ -40,18 +40,8 @@ class AuthMockService implements AuthService {
   }
 
   @override
-  Future<void> signup(
-    String name, 
-    String email, 
-    String password, 
-    File? image
-  ) async {
-    final newUser = ChatUser(
-      id: DateTime.now().microsecondsSinceEpoch.toString(),
-      name: name,
-      email: email,
-      imageUrl: image?.path ?? 'assets/images/avatar.png'
-    );
+  Future<void> signup(String name, String email, String password, File? image) async {
+    final newUser = ChatUser(id: DateTime.now().microsecondsSinceEpoch.toString(), name: name, email: email, imageUrl: image?.path ?? 'assets/images/avatar.png');
 
     _users.putIfAbsent(email, () => newUser);
     _updateUser(newUser);
@@ -61,5 +51,4 @@ class AuthMockService implements AuthService {
   Stream<ChatUser?> get userChanges {
     return _userStream;
   }
-
 }
