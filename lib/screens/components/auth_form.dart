@@ -91,6 +91,7 @@ class _AuthFormState extends State<AuthForm> {
                 TextFormField(
                   initialValue: _formData.password,
                   onChanged: (password) => _formData.password = password,
+                  obscureText: true,
                   key: const ValueKey('password_key'),
                   decoration: const InputDecoration(labelText: 'Password'),
                   validator: (String? password) {
