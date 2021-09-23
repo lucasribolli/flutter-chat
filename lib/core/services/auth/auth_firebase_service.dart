@@ -5,6 +5,7 @@ import 'package:chat/core/services/auth/auth_service.dart';
 import 'package:chat/core/services/users/user_firebase_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 
 class AuthFirebaseService implements AuthService {
   static ChatUser? _currentUser;
@@ -17,11 +18,15 @@ class AuthFirebaseService implements AuthService {
     }
   });
 
-  static ChatUser _toChatUser(User user, [String? imageUrl]) {
+  static ChatUser _toChatUser(
+    User user, [
+    String? name,
+    String? imageUrl,
+  ]) {
     return ChatUser(
       id: user.uid,
       email: user.email!,
-      name: user.displayName ?? user.email!.split('@').first,
+      name: name ?? user.displayName ?? user.email!.split('@').first,
       imageUrl: imageUrl ?? user.photoURL ?? 'assets/images/avatar.png',
     );
   }
@@ -63,9 +68,10 @@ class AuthFirebaseService implements AuthService {
       credential.user?.updateDisplayName(name);
       credential.user?.updatePhotoURL(imageUrl);
 
-      await UserFirebaseService().save(_toChatUser(credential.user!, imageUrl));
-    } on FirebaseAuthException catch (_) {
-      // TODO: handle exceptions
+      _currentUser = _toChatUser(credential.user!, name, imageUrl);
+      await UserFirebaseService().save(_currentUser!);
+    } on FirebaseAuthException catch (e) {
+      debugPrint(e.toString());
     }
   }
 
